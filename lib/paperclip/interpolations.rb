@@ -166,6 +166,19 @@ module Paperclip
       end
     end
 
+    # Returns the id of the instance in a split path form. e.g. returns
+    # 000/001/234 for an id of 1234.
+    def sid_partition attachment, style_name
+      case sid = attachment.instance.sid
+      when Integer
+        ("%09d" % sid).scan(/\d{3}/).join("/")
+      when String
+        sid.scan(/.{3}/).first(3).join("/")
+      else
+        nil
+      end
+    end
+
     # Returns the pluralized form of the attachment name. e.g.
     # "avatars" for an attachment of :avatar
     def attachment attachment, style_name
